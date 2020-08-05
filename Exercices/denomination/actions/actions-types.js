@@ -23,3 +23,22 @@ export const setMemory = payload => {
         type: SET_MEMORY, payload
     }
 };
+
+export const increment = () => {
+
+    return {
+        type : 'INCREMENT_COUNTER'
+    }
+}
+
+let interval = null;
+
+export const incrementAsync = status => {
+
+    return dispatch => {
+
+        interval = setInterval(() => {
+            dispatch(increment())
+        }, 1000)
+    }
+}

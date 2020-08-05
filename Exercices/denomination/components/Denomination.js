@@ -1,18 +1,19 @@
-import React, { Component } from 'react'
+import React, { useEffect } from 'react'
 import { Text, TextInput, View, Button, Alert, StyleSheet, FlatList } from 'react-native'
 
 import { useSelector, useDispatch } from 'react-redux'
 
-import { addAmount, calculTokens, resetTokens } from '../actions/actions-types'
+import { addAmount, calculTokens, resetTokens, incrementAsync } from '../actions/actions-types'
 
 
 const Denomination = () => {
 
-    const { tokens, amount, memory } = useSelector(state => {
+    const { tokens, amount, memory, count } = useSelector(state => {
         return {
             tokens: state.d.tokens,
             amount: state.d.amount,
-            memory: state.m.memory
+            memory: state.m.memory,
+            count : state.c.count
         }
     })
 
@@ -25,10 +26,14 @@ const Denomination = () => {
         tokens.delete('amount')
     }
 
-    console.log(memory)
+    useEffect(() => {
+        dispatch(incrementAsync(true))
+    }, [])
+
 
     return (
         <View style={styles.header}>
+            <Text>Counter : { count } </Text>
             <TextInput
                 style={styles.input}
                 placeholder="Amount"
