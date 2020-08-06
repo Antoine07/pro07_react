@@ -10,8 +10,6 @@ Vous allez créer un jeu utilisant les technologies suivantes (contraintes) :
 
 - Pour la gestion du store utilisez les reducers suivants : juniper et score qui respectivement contiendront la logique du jeu et le calcul du score d'une partie.
 
-- Pour les styles faites un composant qui à l'aide de la composition dans React permettra de styliser les textes du projet : **JuniperText**.
-
 Pour la navigation vous utiliserez la documentation officielle du module complémentaire : https://reactnavigation.org/
 
 ## Présentation du jeu
