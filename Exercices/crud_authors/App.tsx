@@ -1,16 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useMemo, useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import React, { useMemo, useState, useEffect } from 'react'
+import { StyleSheet, Text, View, FlatList, ListRenderItem } from 'react-native'
+
+interface Author{
+  'id' : string;
+  'name' : string;
+  "bio" : string;
+  "shop_name" : string;
+  "books" : string[];
+}
 
 const App = () => {
-  const [authors, setAuthors] = useState(null);
-  const [authorId, setAuthorId] = useState(null);
+  const [authors, setAuthors] = useState<Author[]| null >(null);
+  const [authorId, setAuthorId] = useState<string | null >(null);
 
   const fetchMemo = useMemo(
     () => {
       const fetchData = async () => {
         const results = await fetch("http://192.168.1.113:3000/authors")
-        const data = await results.json()
+        const data : Author[] = await results.json()
 
         setAuthors(data)
       }
@@ -39,15 +47,14 @@ const App = () => {
     <View style={styles.container}>
       <Text>Open up App.js to start working on your app!</Text>
       {authors &&
-        <FlatList
+        <FlatList<Author>
           data={authors}
-          renderItem={({ item }) => <Text>{item.name}</Text>}
-          keyExtractor={({ item }) => Math.random().toString()}
+          renderItem={ ({ item }: { item: Author })  => <Text>ID :{item.id} Name : {item.name}</Text>}
+          keyExtractor={  ((item: Author, index: number)   => item.id  ) }
           ItemSeparatorComponent={renderSeparator}
 
         />
       }
-      <StatusBar style="auto" />
     </View>
   );
 }
