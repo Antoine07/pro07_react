@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar'
 import React, { Component } from 'react'
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
 
 import Denomination from './components/Denomination'
 
@@ -45,7 +46,7 @@ const middlewareMemory_v2 = store => {
 }
 
 
-const middlewares = [middlewareMemory_v2]
+const middlewares = [middlewareMemory_v2, thunk ]
 
 const store = createStore(reducer, applyMiddleware(...middlewares));
 
