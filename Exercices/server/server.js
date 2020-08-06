@@ -1,9 +1,29 @@
 const express = require('express');
-const cors = require('cors');
+// const cors = require('cors');
 
 const app = express();
 const port = 3000;
-app.use(cors());
+// app.use(cors());
+
+app.use(function (req, res, next) {
+
+    // tous les domaines
+    if (req.headers.origin) { 
+        res.header('Access-Control-Allow-Origin', req.headers.origin); 
+        // res.header('Access-Controll-Allow-Credentials', 'true'); // pour les cookies
+    }
+
+    // type de requêtes acceptées 
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,OPTIONS');
+
+    // pour les méthodes options pour put et post on précise que l'on accepte Content-Type et Accept (optionel)
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Headers', 'Accept, Content-Type');
+        res.sendStatus(200);
+    } else {
+        next();
+    }
+})
 
 app.use(express.json({ limit: "1mb" }));
 
