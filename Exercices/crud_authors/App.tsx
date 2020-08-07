@@ -1,27 +1,31 @@
-import React, { useMemo, useState, useEffect } from 'react'
-import { StyleSheet, Text, View, FlatList, ListRenderItem, SafeAreaView } from 'react-native'
+import React, { useMemo } from 'react'
+import { StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native'
 
-import { ArrayDataAuthor, DataAuthor } from './types/author'
+import { useSelector, useDispatch, Provider } from 'react-redux'
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import reducer from './reducers/index'
+
+import { ArrayDataAuthor, DataAuthor, SystemStateAuthor, CombinateStateApp } from './types/author'
+
+import { loadDataAuthorsAsync } from './actions/actions-types'
+
+const store = createStore(reducer, applyMiddleware(thunk))
 
 const App = () => {
-  const [authors, setAuthors] = useState<ArrayDataAuthor | null>(null);
-  const [authorId, setAuthorId] = useState<string | null>(null);
+
+  const dispatch = useDispatch()
+  const { authors, authorId } = useSelector<CombinateStateApp, SystemStateAuthor>(state => state.author  )
 
   const fetchMemo = useMemo(
     () => {
-      const fetchData = async () => {
-        const results = await fetch("http://192.168.1.113:3000/authors")
-        const data: ArrayDataAuthor = await results.json()
-        setAuthors(data)
-        console.log(data)
-      }
+      dispatch(loadDataAuthorsAsync())
 
-      fetchData()
     },
-    [authorId],
+    [ authorId ],
   )
 
-  const renderSeparator : React.FunctionComponent<{ style : StyleSheet }> = () => {
+  const renderSeparator: React.FunctionComponent<{ style: StyleSheet }> = () => {
     return (
       <View
         style={{
@@ -38,6 +42,7 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text>Hello</Text>
       {authors &&
         <FlatList<DataAuthor>
           data={authors}
@@ -55,7 +60,16 @@ const App = () => {
   );
 }
 
-export default App
+const WrapperApp = () => {
+
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  )
+}
+
+export default WrapperApp
 
 const styles = StyleSheet.create({
   container: {

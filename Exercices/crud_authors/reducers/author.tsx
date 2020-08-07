@@ -1,21 +1,21 @@
-import { SystemState, SystemAction } from '../types/author'
+import { SystemStateAuthor, SystemAction } from '../types/author'
 import { LOAD_DATA_AUTHORS } from '../constants/actions'
 
-const initialState: SystemState = {
+const initialState: SystemStateAuthor = {
     authors: [],
-    status: true
+    status: true,
+    authorId :  ''
 }
 
-export default (state: SystemState = initialState, action: SystemAction ): SystemState => {
+export default (state: SystemStateAuthor = initialState, action: SystemAction): SystemStateAuthor => {
 
     switch (action.type) {
 
-        case LOAD_DATA_AUTHORS :
-            const  authors  = action.payload
+        case LOAD_DATA_AUTHORS:
 
             return {
                 ...state,
-                authors
+                authors: action.payload
             }
 
         default:

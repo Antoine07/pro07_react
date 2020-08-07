@@ -1,3 +1,5 @@
+import { Reducer, CombinedState } from "redux"
+
 export interface Author {
     "number": number;
     'name': string;
@@ -12,12 +14,17 @@ export type LoadData = { type: string, payload: ArrayDataAuthor }
 
 export type DataAuthor = [string, Author]
 
-export interface SystemState {
+export interface SystemStateAuthor {
     authors: ArrayDataAuthor
     status: boolean
+    authorId : string
 }
 
 export interface SystemAction {
     type: string 
-    payload?: ArrayDataAuthor | Author | boolean
+    payload: ArrayDataAuthor
 }
+
+export type CombinateStateApp = { author : SystemStateAuthor }
+
+export type RootReducer = Reducer<CombinedState<CombinateStateApp>, SystemAction >

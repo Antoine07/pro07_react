@@ -1,11 +1,11 @@
-import { combineReducers, Reducer } from 'redux'
+import { combineReducers, Reducer, CombinedState } from 'redux'
 
 import author from './author'
 
-import { SystemState } from '../types/author'
+import {  RootReducer } from '../types/author'
 
-const rootReducer : Reducer<any>  = combineReducers({
-    author : SystemState
+const rootReducer : RootReducer = combineReducers({
+    author
 })
 
-export default rootReducer 
+export default rootReducer

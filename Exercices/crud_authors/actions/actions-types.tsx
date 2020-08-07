@@ -7,6 +7,8 @@ import { ArrayDataAuthor, SystemAction } from '../types/author'
 
 export const loadDataAuthors = (payload : ArrayDataAuthor) : SystemAction => {
 
+    // console.log(payload, 'action sync')
+
     return {
         type: LOAD_DATA_AUTHORS, payload
     }
