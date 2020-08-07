@@ -1,28 +1,31 @@
-import React, { useMemo } from 'react'
-import { StyleSheet, Text, View, FlatList, SafeAreaView } from 'react-native'
+import React, { useMemo, Dispatch, SetStateAction } from 'react'
+import { Text, View, FlatList, SafeAreaView, TouchableOpacity, TextInput } from 'react-native'
+
+import styles from './styles'
+import { DataAuthor, SystemStateAuthor, CombinateStateApp } from './types/author'
 
 import { useSelector, useDispatch, Provider } from 'react-redux'
+
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import reducer from './reducers/index'
 
-import { ArrayDataAuthor, DataAuthor, SystemStateAuthor, CombinateStateApp } from './types/author'
-
-import { loadDataAuthorsAsync } from './actions/actions-types'
+import { loadDataAuthorsAsync, addAuthor, setAuthor } from './actions/actions-types'
 
 const store = createStore(reducer, applyMiddleware(thunk))
 
 const App = () => {
 
   const dispatch = useDispatch()
-  const { authors, authorId } = useSelector<CombinateStateApp, SystemStateAuthor>(state => state.author  )
+  const { authors, authorId, author, message } = useSelector<CombinateStateApp, SystemStateAuthor>(state => state.author)
 
+  // memoisation de la fonction n'est recalculée que si authorId change
   const fetchMemo = useMemo(
     () => {
       dispatch(loadDataAuthorsAsync())
-
+      console.log(authorId)
     },
-    [ authorId ],
+    [authorId],
   )
 
   const renderSeparator: React.FunctionComponent<{ style: StyleSheet }> = () => {
@@ -42,20 +45,40 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Hello</Text>
-      {authors &&
-        <FlatList<DataAuthor>
-          data={authors}
-          renderItem={({ item }: { item: DataAuthor }) => <Text style={{ height: 90, margin: 5 }}>Number :{item[1].number} Name : {item[1].name}</Text>}
-          keyExtractor={((item: DataAuthor, index: number) => index.toString())}
-          ItemSeparatorComponent={renderSeparator}
-        // onEndReachedThreshold={0.5}
-        // onEndReached={({ distanceFromEnd }) => {
-        //   console.log('reload', distanceFromEnd)
-        // }}
-
+      <View style={styles.item}>
+        <Text>Name : </Text>
+        <TextInput
+          style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+          onChangeText={text => dispatch(setAuthor(text))}
+          value={author}
         />
-      }
+
+        <Text>{author}</Text>
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={(): any => dispatch(addAuthor({ name : author }))}
+        >
+          <Text>Add Author</Text>
+        </TouchableOpacity>
+        {message != '' && <Text>{message}</Text>}
+      </View>
+      <View style={styles.item}>
+        <Text>Liste des auteurs</Text>
+        {authors &&
+          <FlatList<DataAuthor>
+            data={authors}
+            renderItem={({ item }: { item: DataAuthor }) => <Text style={styles.itemList}>Number :{item[1].number} Name : {item[1].name}</Text>}
+            keyExtractor={((item: DataAuthor, index: number) => index.toString())}
+            ItemSeparatorComponent={renderSeparator}
+          // onEndReachedThreshold={0.5}
+          // onEndReached={({ distanceFromEnd }) => {
+          //   console.log('reload', distanceFromEnd)
+          // }}
+
+          />
+        }
+      </View>
     </SafeAreaView>
   );
 }
@@ -71,12 +94,3 @@ const WrapperApp = () => {
 
 export default WrapperApp
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 50
-  },
-})

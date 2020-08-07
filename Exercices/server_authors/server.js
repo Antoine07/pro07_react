@@ -5,6 +5,9 @@ const app = express();
 const port = 3000;
 // app.use(cors());
 
+const generateHash = () => [ ...Array(10) ].map(i => (~~(Math.random() * 36)).toString(36)).join('');
+
+
 app.use(function (req, res, next) {
 
     // tous les domaines
@@ -138,13 +141,15 @@ app.get('/authors', (req, res) => {
 
 // store new Author
 app.post('/add', (req, res) => {
-    const { name, id } = req.body;
+    const { name } = req.body
+    const id = generateHash()
+
     authors.set(id, req.body);
 
     res.json({
         status: 'success',
         name: name,
-        id : id
+        authorId : id
     });
 });
 

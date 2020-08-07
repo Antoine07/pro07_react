@@ -2,10 +2,10 @@ import { combineReducers, Reducer, CombinedState } from 'redux'
 
 import author from './author'
 
-import {  RootReducer } from '../types/author'
+import { SystemStateAuthor, SystemAction } from '../types/author'
 
-const rootReducer : RootReducer = combineReducers({
-    author
+const rootReducer : Reducer<CombinedState<{author : SystemStateAuthor}>, SystemAction > = combineReducers({
+    author 
 })
 
-export default rootReducer
+export default rootReducer 

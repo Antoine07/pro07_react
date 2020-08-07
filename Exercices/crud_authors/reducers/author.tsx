@@ -1,13 +1,15 @@
-import { SystemStateAuthor, SystemAction } from '../types/author'
-import { LOAD_DATA_AUTHORS } from '../constants/actions'
+import { SystemStateAuthor, SystemAction, ArrayDataAuthor } from '../types/author'
+import { LOAD_DATA_AUTHORS, SET_AUHTOR, MESSAGE} from '../constants/actions'
 
 const initialState: SystemStateAuthor = {
     authors: [],
     status: true,
-    authorId :  ''
+    author: '',
+    authorId: '',
+    message: ''
 }
 
-export default (state: SystemStateAuthor = initialState, action: SystemAction): SystemStateAuthor => {
+export default (state = initialState, action: SystemAction): SystemStateAuthor => {
 
     switch (action.type) {
 
@@ -16,6 +18,23 @@ export default (state: SystemStateAuthor = initialState, action: SystemAction): 
             return {
                 ...state,
                 authors: action.payload
+            }
+
+        case SET_AUHTOR:
+
+            return {
+                ...state,
+                author: action.payload
+            }
+
+        case MESSAGE:
+            const { message, authorId } = action.payload
+
+            return {
+                ...state,
+                message : message,
+                authorId : authorId,
+                author : ''
             }
 
         default:
