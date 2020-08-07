@@ -20,4 +20,6 @@ export type SystemStateAuthor = {
 }
 
 export type CombinateStateApp = { author: SystemStateAuthor }
+
+// TODO voir le type any lorsqu'on a pas de payload
 export type SystemAction = { type: string, payload: ArrayDataAuthor | boolean  | any }
