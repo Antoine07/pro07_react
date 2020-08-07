@@ -1,4 +1,4 @@
-import { SystemStateAuthor, SystemAction, ArrayDataAuthor } from '../types/author'
+import { SystemStateAuthor, SystemAction, ArrayDataAuthor, Author } from '../types/author'
 import { LOAD_DATA_AUTHORS, SET_AUHTOR, MESSAGE} from '../constants/actions'
 
 const initialState: SystemStateAuthor = {
