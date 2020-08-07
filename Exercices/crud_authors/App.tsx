@@ -1,26 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useMemo, useState, useEffect } from 'react'
-import { StyleSheet, Text, View, FlatList, ListRenderItem } from 'react-native'
+import { StyleSheet, Text, View, FlatList, ListRenderItem, SafeAreaView } from 'react-native'
 
-interface Author{
-  'id' : string;
-  'name' : string;
-  "bio" : string;
-  "shop_name" : string;
-  "books" : string[];
-}
+import { ArrayDataAuthor, DataAuthor } from './types/author'
 
 const App = () => {
-  const [authors, setAuthors] = useState<Author[]| null >(null);
-  const [authorId, setAuthorId] = useState<string | null >(null);
+  const [authors, setAuthors] = useState<ArrayDataAuthor | null>(null);
+  const [authorId, setAuthorId] = useState<string | null>(null);
 
   const fetchMemo = useMemo(
     () => {
       const fetchData = async () => {
         const results = await fetch("http://192.168.1.113:3000/authors")
-        const data : Author[] = await results.json()
-
+        const data: ArrayDataAuthor = await results.json()
         setAuthors(data)
+        console.log(data)
       }
 
       fetchData()
@@ -28,7 +21,7 @@ const App = () => {
     [authorId],
   )
 
-  const renderSeparator = () => {
+  const renderSeparator : React.FunctionComponent<{ style : StyleSheet }> = () => {
     return (
       <View
         style={{
@@ -44,18 +37,21 @@ const App = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <SafeAreaView style={styles.container}>
       {authors &&
-        <FlatList<Author>
+        <FlatList<DataAuthor>
           data={authors}
-          renderItem={ ({ item }: { item: Author })  => <Text>ID :{item.id} Name : {item.name}</Text>}
-          keyExtractor={  ((item: Author, index: number)   => item.id  ) }
+          renderItem={({ item }: { item: DataAuthor }) => <Text style={{ height: 90, margin: 5 }}>Number :{item[1].number} Name : {item[1].name}</Text>}
+          keyExtractor={((item: DataAuthor, index: number) => index.toString())}
           ItemSeparatorComponent={renderSeparator}
+        // onEndReachedThreshold={0.5}
+        // onEndReached={({ distanceFromEnd }) => {
+        //   console.log('reload', distanceFromEnd)
+        // }}
 
         />
       }
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -67,5 +63,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 50
   },
 })
